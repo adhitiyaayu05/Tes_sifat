@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tebak Sifat Berdasarkan Nama</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url(img/bground1.jpg);
+            /* background: linear-gradient(45deg, #fa4bb7, #a9b5df); */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: bgAnimation 5s ease infinite;
+        }
+
+        @keyframes bgAnimation {
+            0% { background: linear-gradient(45deg, #fa4bb7, #a9b5df); }
+            50% { background: linear-gradient(45deg, #fa4bb7, #a9b5df); }
+            100% { background: linear-gradient(45deg, #fa4bb7, #a9b5df); }
+        }
+
+        .container {
+            background-image: url(img/bground1.jpg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 15px 40px rgba(209, 39, 127, 0.539);
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+            transform: translateY(100px);
+            animation: slideUp 1s forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: rgb(237, 42, 159);
+            font-size: 1.8em;
+            letter-spacing: 2px;
+            animation: fadeIn 1.5s ease;
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.4em;
+                letter-spacing: 1px;
+            }
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        input {
+            padding: 12px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 400px;
+            border: 2px solid #4f0732;
+            border-radius: 8px;
+            font-size: 1.2em;
+            transition: all 0.3s ease-in-out;
+        }
+
+        @media (max-width: 480px) {
+            input {
+                font-size: 1em;
+                padding: 10px;
+            }
+        }
+
+        input:focus {
+            /* Ubah warna border saat fokus */
+            border-color: deeppink;  
+            outline: none;
+            box-shadow: #4f0732;
+        }
+
+        button {
+            padding: 12px 30px;
+            background-color: #fa4bb7;
+            color: #f7f3f5; 
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 480px) {
+            button {
+                font-size: 1em;
+                padding: 10px 20px;
+            }
+        }
+
+        button:hover {
+            /* Ubah warna tombol saat hover */
+            background-color: deeppink;
+            transform: scale(1.1);
+        }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        #tabelHasil {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            animation: fadeInTable 1s ease;
+        }
+
+        @keyframes fadeInTable {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        #tabelHasil th, #tabelHasil td {
+            padding: 10px;
+            border: 1px solid #a91155;
+            text-align: left;
+        }
+
+        @media (max-width: 480px) {
+            #tabelHasil th, #tabelHasil td {
+                padding: 8px;
+                font-size: 0.9em;
+            }
+        }
+
+        #tabelHasil th {
+            background-color: #fa4bb7;
+            color: #fdf4fc;
+        }
+
+        #tabelHasil tbody tr:nth-child(even) {
+            background-color: #fc81e7;
+        }
+
+        #tabelHasil tbody tr:hover {
+            background-image: url(img/bground1.jpg);
+        }
+
+        .hapusBtn {
+            background-color: rgb(245, 60, 153);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .hapusBtn:hover {
+            background-color: rgb(243, 89, 197);
+        }
+
+        span {
+            color: rgb(255, 100, 155);
+            display: inline-block;
+        }
+    </style>
+
+</head>
+<body>
+    
+    <div class="container">
+        <h1>Tebak Sifat Berdasarkan Nama <br><span>Tuliskan Nama Anda di Kolom Komentar!</span></h1>
+
+        <!-- Input Nama -->
+         <input type="text" id="namaInput" placeholder="Masukkan nama anda.." />
+         <button onclick="tebakSifat()">Tebak Sifat</button>
+
+         <!-- Tabel Hasil -->
+         <div class="table-container">
+             <table id="tabelHasil">
+                <thead>
+                    <tr>
+                        <th>Nama</th>
+                        <th>Sifat</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Tabel hasil akan ditampilkan disini -->
+                </tbody>
+             </table>
+         </div>
+    </div>
+
+    <script>
+        function tebakSifat() {
+            const nama = document.getElementById("namaInput").value.trim().toLowerCase();
+            if (!nama) {
+                alert("Silakan masukkan nama terlebih dahulu!");
+                return;
+            }
+            const tabelBody = document.getElementById("tabelHasil").getElementsByTagName("tbody")[0];
+
+        // Ambil huruf tengah dari nama
+        const panjangNama = nama.length;
+        let hurufTengah = "";
+
+        if (panjangNama % 2 === 1) {
+            // Jika jumlah huruf ganjil, ambil huruf tengah
+            hurufTengah = nama.charAt(Math.floor(panjangNama / 2));
+        } else {
+            // Jika jumlah huruf genap, ambil huruf tengah kiri
+            hurufTengah = nama.charAt(Math.floor(panjangNama / 2) -1);
+        }
+
+        // Daftar sifat berdasarkan huruf tengah
+        let sifat = "";
+        const sifatList = {
+            "a": "Kamu terlihat sangat kreatif dan penuh dengan ide brilian.",
+            "b": "Kamu sangat analitis dan suka berpikir mendalam.",
+            "c": "Kamu ramah dan senang berinteraksi dengan banyak orang.",
+            "d": "Kamu tegas dan berprinsip dalam segala hal.",
+            "e": "Kamu penuh perhatian dan selalu peduli dengan orang lain.",
+            "f": "Kamu kreatif dan memiliki daya cipta yang luar biasa",
+            "g": "Kamu sabar dan mampu mengatasi masalah dengan tenang.",
+            "h": "Kamu penuh semangat dan kharismatik.",
+            "i": "Kamu sangat penyayang dan peduli dengan orang sekitar.",
+            "j": "Kamu suka belajar hal baru dan penuh rasa ingin tahu.",
+            "k": "Kamu mandiri dan memiliki visi yang jelas untuk masa depan.",
+            "l": "kamu sangat perhatian dan selalu mendengarkan orang lain.",
+            "m": "kamu terlihat memiliki sifat yang romantis.",
+            "n": "Kamu terlihat seperti ibu peri karena sangat empatik dan peduli dengan perasaan orang lain.",
+            "o": "Kamu berani mengambil langkah baru dan tidak takut gagal seperti ultramen.",
+            "p": "Dilihat beberapa kali pun anda terlihat seperti golongan wibu akut",
+            "q": "Jika dilihat dengan teliti sepertinya anda cukup menawan jika tidak dilihat",
+            "r": "Entah mengapa jika dilihat anda memiliki sifat seperti mimi peri",
+            "s": "Kamu memiliki keberanian sebesar telor dinosaurus",
+            "t": "Jika dilihat dengan baik sepertinya sifat anda terlihat seperti popo berbie yang memiliki sifat mood swing",
+            "u": "Kamu memiliki sifat seperti uni bakwan yang senang tertawa dan suka membuat orang lain tertawa",
+            "v": "Kamu memiliki sifat playboy/playgirl karena kamu mudah merasa bosan dengan sesuatu, dan ingin mencoba hal hal baru terutama soal pasangan",
+            "w": "Kamu memiliki daya tarik untuk membuat orang terpesona sebesar upil",
+            "x": "Jauh di dalam lubuk hatimu dirimu terlihat seperti memiliki sifat boti",
+            "y": "Dirimu terlihat seperti memiliki sifat julid yang parah",
+            "z": "Jika dilihat dengan teliti anda memiliki sifat seperti ijat diam diam merepotkan"
+        };
+
+        // Tentukan sifat berdasarkan huruf tengah
+        sifat = sifatList[hurufTengah] || "Nama ini sangat unik, seperti unik bakwan";
+
+        //Menambahkan baris baru ke tabel
+        const row = tabelBody.insertRow();
+        const cellNama = row.insertCell(0);
+        const cellSifat = row.insertCell(1);
+        const cellHapus = row.insertCell(2);
+
+        cellNama.textContent = nama.charAt(0).toUpperCase() + nama.slice(1);
+        cellSifat.textContent = sifat;
+
+        //Menambahkan tombol hapus
+        const hapusButton = document.createElement("button");
+        hapusButton.textContent = "Hapus";
+        hapusButton.classList.add("hapusBtn");
+        hapusButton.onclick = function() {
+            tabelBody.deleteRow(row.rowIndex -1);
+            // Menghapus baris yang diklik
+        };
+
+        cellHapus.appendChild(hapusButton);
+        
+        // Reset input field
+        document.getElementById("namaInput").value = "";
+        }
+    </script>
+</body>
+</html>
